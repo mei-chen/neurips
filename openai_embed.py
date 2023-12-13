@@ -13,7 +13,7 @@ client = OpenAI(
    api_key=OPENAI_API_KEY,
 )
 
-df = pd.read_csv('combined.csv')
+df = pd.read_csv('data/combined.csv')
 df = df.rename(columns={'h5_strong_texts': 'title', 
                         'abstract_texts': 'abstract'})
 df['abstract'] = df['abstract'].str[1:]
@@ -37,5 +37,5 @@ def get_embedding(text, model="text-embedding-ada-002"):
    return client.embeddings.create(input = [text], model=model).data[0].embedding
 
 df['ada_embedding'] = df['combined'].apply(lambda x: get_embedding(x, model='text-embedding-ada-002'))
-df.to_csv('embedded_combined1.csv', index=False)
+df.to_csv('embedding/embedded_combined1.csv', index=False)
 

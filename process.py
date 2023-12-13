@@ -16,9 +16,7 @@ df4['session'] = 4
 df5['session'] = 5
 df6['session'] = 6
 
-
 # combine the 6 dfs into one
-
 df = pd.concat([df1, df2, df3, df4, df5, df6], ignore_index=True)
 
 df.to_csv('data/combined.csv', index=False)
