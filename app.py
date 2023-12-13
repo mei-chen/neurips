@@ -21,9 +21,6 @@ st.set_page_config(layout="wide")
 
 st.title("NeurIPS Poster Search")
 
-# Load your CSV file
-text = pd.read_csv('visual/combined.csv')
-st.write(text.columns)
 
 ############ LOAD EMBEDDING ############
 # Load the list of embeddings
