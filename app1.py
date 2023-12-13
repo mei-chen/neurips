@@ -34,6 +34,21 @@ def get_embedding(text, model="text-embedding-ada-002"):
     response = client.embeddings.create(input=[text], model=model)
     return np.array(response.data[0].embedding)
 
+def google_search_url(title):
+    return f"https://www.google.com/search?q={'+'.join(title.split())}"
+
+# Function to create a Markdown table with clickable links
+def create_markdown_table(df):
+    # Start with the header
+    markdown = "| Title | Relevance Score | Poster Session |\n| --- | --- | --- |\n"
+    
+    # Add each row
+    for _, row in df.iterrows():
+        google_url = google_search_url(row['Title'])
+        markdown += f"| [{row['Title']}]({google_url}) | {row['Relevance Score']:.2f} | {row['Poster Session']} |\n"
+    
+    return markdown
+
 # UMAP Visualization
 df_umap = pd.read_csv('visual/umap_emb.csv')
 
@@ -90,6 +105,8 @@ if query:
     #     # st.write(f"{title} (Score: {score})")
     #     st.markdown(f"- **{title}** (Similarity Score: {score:.2f})")
 
+    ########### TABLE PRINT ################
+
     # Display top 6 relevant titles
     st.markdown("### Top 6 Relevant Titles")
 
@@ -104,15 +121,20 @@ if query:
         'Poster Session': top_sessions.values
     })
 
-    # Format the DataFrame
-    top_titles_df_formatted = top_titles_df.style.format({'Score': '{:.2f}'})
+    # # Format the DataFrame
+    # top_titles_df_formatted = top_titles_df.style.format({'Score': '{:.2f}'})
 
 
-    # Set the display option in Pandas (max column width)
-    pd.set_option('display.max_colwidth', None)
+    # # Set the display option in Pandas (max column width)
+    # pd.set_option('display.max_colwidth', None)
 
-    st.dataframe(top_titles_df[['Title', 'Relevance Score', 'Poster Session']].style.format({'Score': '{:.2f}'}))
+    # st.dataframe(top_titles_df[['Title', 'Relevance Score', 'Poster Session']].style.format({'Score': '{:.2f}'}))
 
+    # Create the Markdown table
+    table_md = create_markdown_table(top_titles_df)
+
+    # Display the table in Streamlit
+    st.markdown(table_md, unsafe_allow_html=True)
 
 
 
