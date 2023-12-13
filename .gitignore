@@ -1,2 +1,4 @@
 .env
 embedded_combined.csv
+
+embedding/*

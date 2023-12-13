@@ -5,11 +5,12 @@ import tiktoken
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
 # Access your API key
-api_key = os.getenv('OPENAI_API_KEY')
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 client = OpenAI(
-   api_key=api_key,
+   api_key=OPENAI_API_KEY,
 )
 
 df = pd.read_csv('combined.csv')
