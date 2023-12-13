@@ -53,7 +53,10 @@ def create_markdown_table(df):
 df_umap = pd.read_csv('visual/umap_emb.csv')
 
 # User input for search
-query = st.text_input("What research are you interested in?")
+query = st.text_input("What research are you interested in?", 
+                      help="You can write in full sentences")
+
+
 
 
 # Search functionality
@@ -77,7 +80,7 @@ if query:
 
 
         # Create and customize the chart with conditional color
-    chart = alt.Chart(df_umap_copy).mark_point(size =100, filled=True).encode(
+    chart = alt.Chart(df_umap_copy).mark_point(size =111, filled=True).encode(
         x=alt.X('x', axis=alt.Axis(title=None)),
         y=alt.Y('y', axis=alt.Axis(title=None)),
         color=alt.condition(
@@ -88,7 +91,7 @@ if query:
         tooltip=['title']
     ).properties(
         width=600,  # Adjust the width as needed
-        height=700  # Adjust the height as needed
+        height=800  # Adjust the height as needed
     ).configure_axis(
         grid=False,
         labels=False,
@@ -136,6 +139,25 @@ if query:
     # Display the table in Streamlit
     st.markdown(table_md, unsafe_allow_html=True)
 
+    # Footer 
+    footer_note = """
+        <style>
+        .footer_note {
+            font-size: 3px; 
+            font-style: italic; 
+            text-align: center;
+        }
+        </style>
+        <div class="footer_note">
+        <br><br>
+        <p>Special thanks to Jay Alammar for pointers that made this project possible</p>
+        <p>Made with ❤️ by Mei Chen</p>
+        <p>Feedback and suggestions --> <a href="mailto:meichen.mlc@gmail.com">meichen.mlc@gmail.com</a></p>
+        </div>
+        """
+
+    st.markdown(footer_note, unsafe_allow_html=True)
+
 
 
 # Create and customize the chart
@@ -151,5 +173,11 @@ if query:
 # )
 
 # st.altair_chart(chart, use_container_width=True)
+
+# # Sidebar for user input
+# with st.sidebar:
+#     st.write('Special thanks to Jay Alammar for helping with the UMAP visualization')
+#     st.write('If you have questions or have feedback, please email me at: meichen.mlc@gmail.com')
+#     st.write('My twitter is: @meigustas')
 
 
