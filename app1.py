@@ -38,7 +38,7 @@ def get_embedding(text, model="text-embedding-ada-002"):
 df_umap = pd.read_csv('visual/umap_emb.csv')
 
 # User input for search
-query = st.text_input("What topics are you interested in?")
+query = st.text_input("What research are you interested in?")
 
 
 # Search functionality
@@ -52,9 +52,6 @@ if query:
     scored_titles = list(zip(similarity_scores, embeddings_df['title'], range(len(similarity_scores))))
     scored_titles.sort(key=lambda x: x[0], reverse=True)
 
-    # Display top 6 relevant titles
-    for score, title, _ in scored_titles[:6]:
-        st.write(f"{title} (Score: {score})")
 
     # Get indices of top 6 relevant papers
     top_indices = [idx for _, _, idx in scored_titles[:6]]
@@ -76,15 +73,45 @@ if query:
         tooltip=['title']
     ).properties(
         width=600,  # Adjust the width as needed
-        height=400  # Adjust the height as needed
+        height=700  # Adjust the height as needed
     ).configure_axis(
         grid=False,
         labels=False,
         ticks=False,
         domain=False
     )
+    
 
     st.altair_chart(chart, use_container_width=True)
+
+    # Display top 6 relevant titles
+    # st.write('Top 6 Relevant Papers:')
+    # for score, title, _ in scored_titles[:6]:
+    #     # st.write(f"{title} (Score: {score})")
+    #     st.markdown(f"- **{title}** (Similarity Score: {score:.2f})")
+
+    # Display top 6 relevant titles
+    st.markdown("### Top 6 Relevant Titles")
+
+    # Retrieve session numbers for the top titles
+    top_indices = [idx for _, _, idx in scored_titles[:6]]
+    top_sessions = embeddings_df.iloc[top_indices]['session']
+
+    # Create a DataFrame for displaying
+    top_titles_df = pd.DataFrame({
+        'Title': [title for _, title, _ in scored_titles[:6]],
+        'Score': [score for score, _, _ in scored_titles[:6]],
+        'Session': top_sessions.values
+    })
+
+    # Format the DataFrame
+    top_titles_df_formatted = top_titles_df.style.format({'Score': '{:.2f}'})
+
+
+    # Set the display option in Pandas (max column width)
+    pd.set_option('display.max_colwidth', None)
+
+    st.dataframe(top_titles_df[['Title', 'Relevance Score']].style.format({'Score': '{:.2f}'}))
 
 
 
