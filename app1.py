@@ -100,8 +100,8 @@ if query:
     # Create a DataFrame for displaying
     top_titles_df = pd.DataFrame({
         'Title': [title for _, title, _ in scored_titles[:6]],
-        'Score': [score for score, _, _ in scored_titles[:6]],
-        'Session': top_sessions.values
+        'Relevance Score': [score for score, _, _ in scored_titles[:6]],
+        'Poster Session': top_sessions.values
     })
 
     # Format the DataFrame
@@ -111,7 +111,7 @@ if query:
     # Set the display option in Pandas (max column width)
     pd.set_option('display.max_colwidth', None)
 
-    st.dataframe(top_titles_df[['Title', 'Score']].style.format({'Score': '{:.2f}'}))
+    st.dataframe(top_titles_df[['Title', 'Relevance Score', 'Poster Session']].style.format({'Score': '{:.2f}'}))
 
 
 
