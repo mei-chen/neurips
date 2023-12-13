@@ -111,7 +111,7 @@ if query:
     # Set the display option in Pandas (max column width)
     pd.set_option('display.max_colwidth', None)
 
-    st.dataframe(top_titles_df[['Title', 'Relevance Score']].style.format({'Score': '{:.2f}'}))
+    st.dataframe(top_titles_df[['Title', 'Score']].style.format({'Score': '{:.2f}'}))
 
 
 
