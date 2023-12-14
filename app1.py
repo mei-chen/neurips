@@ -20,7 +20,7 @@ st.set_page_config(layout="wide")
 st.title("NeurIPS Poster Search")
 
 # Load CSV files
-embeddings_df = pd.read_csv('embedding/embedded_combined1.csv')
+embeddings_df = pd.read_csv('embedding/embedded_combined2.csv')
 
 # Assuming 'ada_embedding' is a string representation of a list
 # Convert it to numpy array
@@ -40,14 +40,15 @@ def google_search_url(title):
 # Function to create a Markdown table with clickable links
 def create_markdown_table(df):
     # Start with the header
-    markdown = "| Title | Relevance Score | Poster Session |\n| --- | --- | --- |\n"
+    markdown = "| Title | Relevance Score | Poster Session | Poster Number |\n| --- | --- | --- | --- |\n"
     
     # Add each row
     for _, row in df.iterrows():
         google_url = google_search_url(row['Title'])
-        markdown += f"| [{row['Title']}]({google_url}) | {row['Relevance Score']:.2f} | {row['Poster Session']} |\n"
+        markdown += f"| [{row['Title']}]({google_url}) | {row['Relevance Score']:.2f} | {row['Poster Session']} | {row['Poster Number']} |\n"
     
     return markdown
+
 
 # UMAP Visualization
 df_umap = pd.read_csv('visual/umap_emb.csv')
@@ -124,22 +125,15 @@ if query:
     # Retrieve session numbers for the top titles
     top_indices = [idx for _, _, idx in scored_titles[:6]]
     top_sessions = embeddings_df.iloc[top_indices]['session']
+    top_poster_numbers = embeddings_df.iloc[top_indices]['poster_number']
 
     # Create a DataFrame for displaying
     top_titles_df = pd.DataFrame({
         'Title': [title for _, title, _ in scored_titles[:6]],
         'Relevance Score': [score for score, _, _ in scored_titles[:6]],
-        'Poster Session': top_sessions.values
+        'Poster Session': top_sessions.values, 
+        'Poster Number': top_poster_numbers.values
     })
-
-    # # Format the DataFrame
-    # top_titles_df_formatted = top_titles_df.style.format({'Score': '{:.2f}'})
-
-
-    # # Set the display option in Pandas (max column width)
-    # pd.set_option('display.max_colwidth', None)
-
-    # st.dataframe(top_titles_df[['Title', 'Relevance Score', 'Poster Session']].style.format({'Score': '{:.2f}'}))
 
     # Create the Markdown table
     table_md = create_markdown_table(top_titles_df)
@@ -147,7 +141,9 @@ if query:
     # Display the table in Streamlit
     st.markdown(table_md, unsafe_allow_html=True)
 
-    # Footer 
+
+
+    ###################### Footer ######################
     footer_note = """
         <style>
         .footer_note {
@@ -160,7 +156,7 @@ if query:
         </style>
         <div class="footer_note">
         <br><br>
-        <p>Special thanks to Jay Alammar for pointers that made this project possible</p>
+        <p>Special thanks to Jay Alammar</p>
         <p>Made with ❤️ by Mei Chen</p>
         <p>Feedback and suggestions --> <a href="mailto:meichen.mlc@gmail.com">meichen.mlc@gmail.com</a></p>
         </div>
