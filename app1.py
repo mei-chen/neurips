@@ -57,6 +57,14 @@ query = st.text_input("What research are you interested in?",
                       help="You can write in full sentences")
 
 
+sesh = {
+    1: 'Tues 10:45',
+    2: 'Tues 15:15',
+    3: 'Wed 10:45',
+    4: 'Wed 17:00',
+    5: 'Thurs 10:45',
+    6: 'Thurs 17:00',
+}
 
 
 # Search functionality
@@ -143,9 +151,11 @@ if query:
     footer_note = """
         <style>
         .footer_note {
-            font-size: 3px; 
-            font-style: italic; 
-            text-align: center;
+        font-size: 10px; 
+        font-style: italic; 
+        text-align: right;  /* Right align text */
+        margin-right: 3px; /* Optional: adds some margin to the right */
+        padding: 3px;      /* Optional: adds some padding around the text */
         }
         </style>
         <div class="footer_note">
